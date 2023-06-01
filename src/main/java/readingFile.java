@@ -11,7 +11,10 @@ import java.io.FileInputStream;
 public class readingFile {
 
     private ArrayList<String> keyWords = new ArrayList<>();
+    private ArrayList<String> missingKeyWords = new ArrayList<>();
+    private ArrayList<String> commonKeyWords = new ArrayList<>();
     private File[] files;
+    private String[] jobDescription = new String[100];
     private String titleOfJob;
     private File cvFile;
 
@@ -20,6 +23,7 @@ public class readingFile {
         selectJobDescription();
 //        readCvFile();
     }
+
 
     private void readCvFile() { // קוראת את הקובץ ומציגה את התוכן
         System.out.println(displayTheFileContents(this.cvFile));
@@ -49,11 +53,19 @@ public class readingFile {
         File file4 = new File("jobsTitle/Software Developer.docx");
         File file5 = new File("jobsTitle/Software Tester.docx");
         File file6 = new File("jobsTitle/Web Developer.docx");
-        File cvFile = new File("jobsTitle/CV shoham sofer P.docx");
+        File cvFile = new File("C:\\Users\\sofer\\OneDrive\\שולחן העבודה\\פרויקט\\CV shoham sofer P.docx");
         File[] files = {file, file1, file2, file3, file4, file5, file6};
         this.cvFile = cvFile;
         this.files = files;
         System.out.println("Files added ");
+        toFillTheJobDescription();
+
+    }
+
+    public void toFillTheJobDescription (){
+        for (int i = 0; i < this.files.length; i++) {
+            this.jobDescription[i] = deleteDocx(this.files[i].getName());
+        }
 
     }
 
@@ -85,13 +97,16 @@ public class readingFile {
     }
 
     public void selectJobDescription() { // מבקש מהמשתמש שיבחר את תיאור המשרה שלו
-        String[] jobDescription = new String[this.files.length];
-        for (int i = 0; i < this.files.length; i++) {
-            jobDescription[i] = this.files[i].getName();
-
-        }
-        for (int i = 0; i < jobDescription.length; i++) {
-            System.out.println(i + 1 + ". " + deleteDocx(jobDescription[i]));
+//        String[] jobDescription = new String[this.files.length];
+//        for (int i = 0; i < this.files.length; i++) {
+//            jobDescription[i] = this.files[i].getName();
+//
+//        }
+        for (int i = 0; i < this.jobDescription.length; i++) {
+            if(this.jobDescription[i] == null){
+                break;
+            }
+            System.out.println(i + 1 + ". " + this.jobDescription[i]);
         }
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the job description: ");
@@ -113,6 +128,7 @@ public class readingFile {
 //        checkingTheInclusionOfKeywordsInResumes(displayTheFileContents(this.files[jobDescriptionNumber - 1]));
         sumOfCommonKeyWords(this.files[jobDescriptionNumber - 1] , jobDescriptionNumber);
         showAllTheJobCount();
+        this.jobDescription = jobDescription;
 
     }
 
@@ -134,7 +150,7 @@ public class readingFile {
 
     public String deleteCounter(String keyWord, int index) {
 //        System.out.println("start deleteCounter");
-        String newKeyWord = ""; // בעיה במקרה של בחירה ב4 , מדפיס null
+        String newKeyWord = "";
         int length = keyWord.length();
         if (index > 9 && index < 100) {
             if (length != 1) {
@@ -163,13 +179,20 @@ public class readingFile {
         String cvFileContent = displayTheFileContents(this.cvFile);
         String[] newKeyWords = descriptionJob.split("\\.");
         int counter = 0;
-        String theKeyWord = null;
+        String theKeyWord = "";
+        ArrayList<String> missingWords = new ArrayList<>();
+        ArrayList<String> commonWords = new ArrayList<>();
         for (int i = 0; i < newKeyWords.length; i++) {
             theKeyWord = deleteCounter(newKeyWords[i] , index);
             if (cvFileContent.contains(theKeyWord)) {
                 counter++;
+                commonWords.add(theKeyWord);
+            }else {
+                missingWords.add(theKeyWord);
             }
         }
+        this.missingKeyWords = missingWords;
+        this.commonKeyWords = commonWords;
         return counter;
 
     }
@@ -211,4 +234,63 @@ public class readingFile {
             System.out.println("Goodbye");
         }
     }
+
+    public void showMissingKeyWords() {
+        System.out.println("start showMissingKeyWords");
+        System.out.println("The missing key words are: " + this.missingKeyWords);
+    }
+    public int showCommonKeyWords() {
+        System.out.println("start showCommonKeyWords");
+        System.out.println("The common key words are: " + this.commonKeyWords);
+        return this.commonKeyWords.size();
+    }
+
+    public void mainMenu (){ // לראות איפה אפשר לדחוף ת התפריט הראשי
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("main menu: ");
+        System.out.println("which of the following would you like to do?");
+        System.out.println("1. show the job description");
+        System.out.println("2. show the cv");
+        System.out.println("3. show the missing key words");
+        System.out.println("4. show the common key words");
+        System.out.println("5. show the sum of common key words");
+        System.out.println("6. show the most suitable job");
+        System.out.println("7. exit");
+        int answer = scanner.nextInt();
+        switch (answer) {
+            case 1 -> {
+                System.out.println(Arrays.toString(this.jobDescription));
+                mainMenu();
+            }
+            case 2 -> {
+                System.out.println(displayTheFileContents(this.cvFile));
+                mainMenu();
+            }
+            case 3 -> {
+                showMissingKeyWords();
+                mainMenu();
+            }
+            case 4 -> {
+                showCommonKeyWords();
+                mainMenu();
+            }
+            case 5 -> {
+                System.out.println("The sum of common key words is: " + showCommonKeyWords());
+                mainMenu();
+            }
+            case 6 -> {
+                checksOtherJobs();
+                mainMenu();
+            }
+            case 7 -> System.out.println("Goodbye");
+            default -> {
+                System.out.println("Wrong input");
+                mainMenu();
+            }
+        }
+
+
+
+    }
+
 }
