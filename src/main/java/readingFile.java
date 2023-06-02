@@ -248,7 +248,7 @@ public class readingFile {
         }
     }
 
-    public void mainMenu (){ // לראות איפה אפשר לדחוף ת התפריט הראשי
+    public void mainMenu (){ // תפריט ראשי
         Scanner scanner = new Scanner(System.in);
         System.out.println("main menu: ");
         System.out.println("which of the following would you like to do?");
