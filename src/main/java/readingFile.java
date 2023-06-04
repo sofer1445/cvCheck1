@@ -8,11 +8,15 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.FileInputStream;
 
+import static com.sun.tools.javac.util.StringUtils.toUpperCase;
+
 public class readingFile {
 
     private ArrayList<String> keyWords = new ArrayList<>();
-    private ArrayList<String> missingKeyWords = new ArrayList<>();
-    private ArrayList<String> commonKeyWords = new ArrayList<>();
+//    private ArrayList<String> missingKeyWords = new ArrayList<>();
+    private Set<String> missingKeyWords = new HashSet<>();
+//    private ArrayList<String> commonKeyWords = new ArrayList<>();
+    private Set<String> commonKeyWords = new HashSet<>();
     private File[] files;
     private final String[] jobDescription = new String[100];
 //    private HashMap<String, Integer> theRightJob = new HashMap<>();
@@ -171,18 +175,21 @@ public class readingFile {
         File file = new File("jobsTitle/" + fileName + ".docx");
         return file;
     }
-
+    public String makeLowerCase(String str) {
+        return str.toLowerCase();
+    }
     public int cvKeywordChecker(String descriptionJob , int index) { // בודק אם מילות המפתח קיימות בקובץ הקורות חיים
         System.out.println("____________________");
+//        wordSearch containsWord;
         String cvFileContent = displayTheFileContents(this.cvFile);
         String[] newKeyWords = descriptionJob.split("\\.");
         int counter = 0;
         String theKeyWord = "";
-        ArrayList<String> missingWords = new ArrayList<>();
-        ArrayList<String> commonWords = new ArrayList<>();
+        Set<String> missingWords = new HashSet<>();
+        Set<String> commonWords = new HashSet<>();
         for (int i = 0; i < newKeyWords.length; i++) {
-            theKeyWord = deleteCounter(newKeyWords[i] , index);
-            if (cvFileContent.contains(theKeyWord)) {
+            theKeyWord = deleteCounter((newKeyWords[i]) , index);
+            if ((cvFileContent).contains(theKeyWord)) {
                 counter++;
                 commonWords.add(theKeyWord);
             }else {
@@ -194,6 +201,31 @@ public class readingFile {
         return counter;
 
     }
+//public int cvKeywordChecker(String descriptionJob, int index) { // לבדוק אם אפשר להוסיף את המחלקה החדשה ולהריץ את הפונקציה הזאת
+//    System.out.println("____________________");
+//    String cvFileContent = displayTheFileContents(this.cvFile);
+//    String[] newKeyWords = descriptionJob.split("\\.");
+//    int counter = 0;
+//    String theKeyWord = null;
+//    ArrayList<String> missingWords = new ArrayList<>();
+//    ArrayList<String> commonWords = new ArrayList<>();
+//
+//    for (int i = 0; i < newKeyWords.length; i++) {
+//        theKeyWord = deleteCounter(newKeyWords[i], index);
+//        wordSearch containsWord = new wordSearch(cvFileContent, theKeyWord);
+//        if (containsWord.containsWord()) {
+//            counter++;
+//            commonWords.add(theKeyWord);
+//        } else {
+//            missingWords.add(theKeyWord);
+//        }
+//    }
+//
+//    this.missingKeyWords = missingWords;
+//    this.commonKeyWords = commonWords;
+//    return counter;
+//}
+
 
     public void checksOtherJobs() { // בודק אם יש משרה אחרת מתאימה
         System.out.println("start checksOtherJobs");
@@ -286,9 +318,10 @@ public class readingFile {
                 mainMenu();
             }
         }
-
-
-
     }
+
+    //Make all letters lowercase
+
+
 
 }
