@@ -1,15 +1,13 @@
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.*;
+package com.dev;
+
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import java.util.regex.*;
 
+import java.io.File;
 import java.io.FileInputStream;
-
-import static com.sun.tools.javac.util.StringUtils.toUpperCase;
+import java.io.IOException;
+import java.util.*;
 
 public class readingFile {
 
